@@ -7,9 +7,9 @@ class RegattaManager {
 
   static List<Boat> initBoats() {
     List<Boat> list = [];
-    list.add(new Boat(" 900", 0));
-    list.add(new Boat("1000", 200));
-    list.add(new Boat("1000", 210));
+    list.add(Boat(" 900", 0));
+    list.add(Boat("1000", 200));
+    list.add(Boat("1000", 210));
     return list;
   }
 }
@@ -32,7 +32,7 @@ class RowingScene extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     Rect rectSize =
-        Rect.fromPoints(Offset(0, 0), Offset(size.width, size.height));
+        Rect.fromPoints(const Offset(0, 0), Offset(size.width, size.height));
     canvas.drawRect(rectSize, bgPaint);
 
     List<Boat> boats = RegattaManager._boats;
@@ -60,7 +60,7 @@ class RowingScene extends CustomPainter {
 
       Rect r = Rect.fromLTWH(b.rowed - 50, lh * i + lh / 2.0 - 25, 100, 40);
 
-      canvas.drawRect(r, this.linePaint);
+      canvas.drawRect(r, linePaint);
     }
     Offset p1 = Offset(0, size.height); //top
     Offset p2 = Offset(size.width, size.height); //bottom
@@ -86,7 +86,9 @@ class _RowingSceneWidgetState extends State<RowingSceneWidget> {
 
   void _updateBoats() {
     pushCount++;
-    RegattaManager._boats.forEach((b) => b.rowed = b.rowed + 10);
+    for (var b in RegattaManager._boats) {
+      b.rowed = b.rowed + 10;
+    }
     setState(() {
       // Trigger a repaint by updating the state
     });
@@ -103,14 +105,14 @@ class _RowingSceneWidgetState extends State<RowingSceneWidget> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _updateBoats,
-        child: Icon(Icons.refresh),
+        child: const Icon(Icons.refresh),
       ),
     );
   }
 }
 
 void main() {
-  runApp(MaterialApp(
+  runApp(const MaterialApp(
     home: RowingSceneWidget(),
   ));
 }

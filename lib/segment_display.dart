@@ -59,19 +59,19 @@ class SegmentDisplay {
 
   draw() {
     int size = v.length;
-    double xm = this.w / size * 0.2; // x margin
-    double dw = this.w / size - xm; // digit width
-    double dh = this.h;
+    double xm = w / size * 0.2; // x margin
+    double dw = w / size - xm; // digit width
+    double dh = h;
 
     for (int i = 0; i < size; i++) {
       var c = v.characters.characterAt(i);
-      double xl = this.x + (i * dw) + (i * xm);
-      drawDigit(xl, this.y, dw, dh, c);
+      double xl = x + (i * dw) + (i * xm);
+      drawDigit(xl, y, dw, dh, c);
     }
   }
 
   void drawDigit(double x, double y, double w, double h, Characters c) {
-    int ss = this.segments[c]!;
+    int ss = segments[c]!;
     //s1
     Paint pt = (ss & 0x40 != 0x00) ? onPaint : offPaint;
     Offset p1 = Offset(x, y);
@@ -111,7 +111,6 @@ class SegmentDisplay {
     //s6
     pt = (ss & 0x01 != 0x00) ? onPaint : offPaint;
     p1 = Offset(x, y + h / 2);
-    ;
     p2 = Offset(x + w, y + h / 2);
     canvas.drawLine(p1, p2, pt);
   }
