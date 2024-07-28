@@ -8,8 +8,15 @@ extension PaintFactory on Paint {
   }
 }
 
+extension PathBuilder on Path {
+  Path build(List<Offset> offsets) {
+    addPolygon(offsets, true);
+    return this;
+  }
+}
+
 class SegmentDisplay {
-  static const double strokeWidth = 4.0;
+  static const double strokeWidth = 1.0;
   Paint onPaint =
       Paint().configure(color: Colors.yellow, strokeWidth: strokeWidth);
   Paint offPaint =
@@ -59,7 +66,7 @@ class SegmentDisplay {
 
   draw() {
     int size = v.length;
-    double xm = w / size * 0.2; // x margin
+    double xm = w / size * 0.25; // x margin
     double dw = w / size - xm; // digit width
     double dh = h;
 
@@ -71,47 +78,100 @@ class SegmentDisplay {
   }
 
   void drawDigit(double x, double y, double w, double h, Characters c) {
+    const double STROKE_WIDTH = 3;
+    const double SEGMENT_POINTEDNESS = 1.0;
+    const double d = STROKE_WIDTH * SEGMENT_POINTEDNESS;
+
     int ss = segments[c]!;
     //s1
     Paint pt = (ss & 0x40 != 0x00) ? onPaint : offPaint;
-    Offset p1 = Offset(x, y);
-    Offset p2 = Offset(x + w, y);
-    canvas.drawLine(p1, p2, pt);
+    canvas.drawPath(
+        Path().build([
+          Offset(x, y),
+          Offset(x + d, y - d),
+          Offset(x + w - d, y - d),
+          Offset(x + w, y),
+          Offset(x + w - d, y + d),
+          Offset(x + d, y + d)
+        ]),
+        pt);
 
     //s2
     pt = (ss & 0x20 != 0x00) ? onPaint : offPaint;
-    p1 = p2;
-    p2 = Offset(x + w, y + h / 2);
-    canvas.drawLine(p1, p2, pt);
+    canvas.drawPath(
+        Path().build([
+          Offset(x + w, y),
+          Offset(x + w + d, y + d),
+          Offset(x + w + d, y + h / 2 - d),
+          Offset(x + w, y + h / 2),
+          Offset(x + w - d, y + h / 2 - d),
+          Offset(x + w - d, y + d)
+        ]),
+        pt);
 
     //s3
     pt = (ss & 0x10 != 0x00) ? onPaint : offPaint;
-    p1 = p2;
-    p2 = Offset(x + w, y + h);
-    canvas.drawLine(p1, p2, pt);
+    canvas.drawPath(
+        Path().build([
+          Offset(x + w, y + h / 2),
+          Offset(x + w + d, y + h / 2 + d),
+          Offset(x + w + d, y + h - d),
+          Offset(x + w, y + h),
+          Offset(x + w - d, y + h - d),
+          Offset(x + w - d, y + h / 2 + d)
+        ]),
+        pt);
 
     //s4
     pt = (ss & 0x08 != 0x00) ? onPaint : offPaint;
-    p1 = p2;
-    p2 = Offset(x, y + h);
-    canvas.drawLine(p1, p2, pt);
+    canvas.drawPath(
+        Path().build([
+          Offset(x + w, y + h),
+          Offset(x + w - d, y + h + d),
+          Offset(x + d, y + h + d),
+          Offset(x, y + h),
+          Offset(x + d, y + h - d),
+          Offset(x + w - d, y + h - d)
+        ]),
+        pt);
 
     //s5
     pt = (ss & 0x04 != 0x00) ? onPaint : offPaint;
-    p1 = p2;
-    p2 = Offset(x, y + h / 2);
-    canvas.drawLine(p1, p2, pt);
+    canvas.drawPath(
+        Path().build([
+          Offset(x, y + h),
+          Offset(x - d, y + h - d),
+          Offset(x - d, y + h / 2 + d),
+          Offset(x, y + h / 2),
+          Offset(x + d, y + h / 2 + d),
+          Offset(x + d, y + h - d)
+        ]),
+        pt);
 
     //s6
     pt = (ss & 0x02 != 0x00) ? onPaint : offPaint;
-    p1 = p2;
-    p2 = Offset(x, y);
-    canvas.drawLine(p1, p2, pt);
+    canvas.drawPath(
+        Path().build([
+          Offset(x, y + h / 2),
+          Offset(x - d, y + h / 2 - d),
+          Offset(x - d, y + d),
+          Offset(x, y),
+          Offset(x + d, y + d),
+          Offset(x + d, y + h / 2 - d)
+        ]),
+        pt);
 
     //s6
     pt = (ss & 0x01 != 0x00) ? onPaint : offPaint;
-    p1 = Offset(x, y + h / 2);
-    p2 = Offset(x + w, y + h / 2);
-    canvas.drawLine(p1, p2, pt);
+    canvas.drawPath(
+        Path().build([
+          Offset(x, y + h / 2),
+          Offset(x + d, y + h / 2 - d),
+          Offset(x + w - d, y + h / 2 - d),
+          Offset(x + w, y + h / 2),
+          Offset(x + w - d, y + h / 2 + d),
+          Offset(x + d, y + h / 2 + d)
+        ]),
+        pt);
   }
 }

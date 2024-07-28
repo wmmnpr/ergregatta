@@ -55,8 +55,12 @@ class RowingScene extends CustomPainter {
       canvas.drawLine(p1, p2, endLine);
 
       SegmentDisplay sg2 = SegmentDisplay(
-          canvas, lw / 2.0 - 200 / 2.0, lh * i + lh / 4.0, 200, 50, b.distance);
+          canvas, lw / 2.0 - 200 / 2.0, lh * i + lh / 4.0, 125, 50, b.distance);
       sg2.draw();
+
+      SegmentDisplay sg3 = SegmentDisplay(
+          canvas, lw  - 200, lh * i + lh / 4.0, 125, 50, b.rowed.toInt().toString().padLeft(4, "0"));
+      sg3.draw();
 
       Rect r = Rect.fromLTWH(b.rowed - 50, lh * i + lh / 2.0 - 25, 100, 40);
 
