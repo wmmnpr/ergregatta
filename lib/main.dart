@@ -31,9 +31,20 @@ class _RowingSceneWidgetState extends State<RowingSceneWidget> {
           child: Container(),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _updateBoats,
-        child: const Icon(Icons.refresh),
+      floatingActionButton: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            FloatingActionButton(
+                child: const Icon(Icons.refresh),
+                onPressed: _updateBoats
+            ),
+            FloatingActionButton(
+                child: const Icon(Icons.bluetooth),
+                onPressed: () => {
+                  Navigator.pop(context, null)
+                }
+            )
+          ]
       ),
     );
   }
