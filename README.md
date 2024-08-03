@@ -19,3 +19,9 @@ samples, guidance on mobile development, and a full API reference.
 
 #service id
 40BD468A-6C6B-35C1-1896-831F32320BF4
+
+
+#TO DO (2024.08.04) 
+connect to peripheral device as demo in local flutter_ble_peripheral example.
+The example as been modified so that the demo app will send data to any app subscribed to the characteristic.
+

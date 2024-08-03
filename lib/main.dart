@@ -4,8 +4,11 @@ import 'package:ergregatta/regatta_manager.dart';
 import 'package:ergregatta/rowing_scene.dart';
 import 'package:ergregatta/screens/bluetooth_off_screen.dart';
 import 'package:ergregatta/screens/scan_screen.dart';
+import 'package:ergregatta/select_device.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+
+import 'configuration_screen.dart';
 
 class RowingSceneWidget extends StatefulWidget {
   const RowingSceneWidget({super.key});
@@ -42,7 +45,7 @@ class _RowingSceneWidgetState extends State<RowingSceneWidget> {
   Future<void> _handleSelectDevice(BuildContext context) async {
     BluetoothDevice returnedDevice = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const ScanScreen()),
+      MaterialPageRoute(builder: (context) =>  ConfigurationScreen()),
     );
     if (returnedDevice != null) {
       setState(() {
@@ -83,7 +86,7 @@ class _RowingSceneWidgetState extends State<RowingSceneWidget> {
         ),
         FloatingActionButton(
             heroTag: "configureBleTag",
-            onPressed: () => {_handleSelectDevice(context)},
+            onPressed: () => _handleSelectDevice(context),
             child: const Icon(Icons.bluetooth))
       ]),
     );
