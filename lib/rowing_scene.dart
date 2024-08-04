@@ -3,8 +3,10 @@ import 'dart:ui';
 import 'package:ergregatta/session_context.dart';
 import 'package:ergregatta/segment_display.dart';
 import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
 
 class RowingScene extends CustomPainter {
+  final log = Logger('PmBleWrapper');
   SessionContext boatManager = SessionContext();
 
   Paint bgPaint = Paint().configure(color: Colors.lightBlue);
@@ -56,7 +58,7 @@ class RowingScene extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    print("shouldRepaint RowingScene ***********************");
+    log.info("shouldRepaint RowingScene ***********************");
     return true;
   }
 }

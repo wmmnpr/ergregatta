@@ -1,6 +1,13 @@
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'dart:async';
+
+import 'package:ergc2_pm_csafe/ergc2_pm_csafe.dart';
+import 'package:ergregatta/pm_ble_wrapper.dart';
+import 'package:logging/logging.dart';
+
+import 'app_event_bus.dart';
 
 class SessionContext {
+  final log = Logger('SessionContext');
   static final SessionContext _instance = SessionContext._internal();
 
   SessionContext._internal();
@@ -9,17 +16,25 @@ class SessionContext {
     return _instance;
   }
 
-  BluetoothDevice? localDevice;
+  PmBleWrapper? localDevice;
 
   final List<Boat> boats = initBoats();
 
   static List<Boat> initBoats() {
     List<Boat> list = [];
-    list.add(Boat(" 900", 0));
-    list.add(Boat("1000", 200));
-    list.add(Boat("1000", 210));
     return list;
   }
+
+  static bindPmToBoat(Boat boat, PmBleWrapper deviceWrapper) {
+    deviceWrapper.pmBLEDevice?.subscribe<StrokeData>(StrokeData.uuid).listen((strokeData) {
+      boat.rowed = strokeData.distance;
+    }, onError: (error) {}, onDone: () {});
+    SessionContext().boats.add(Boat("10000", 0));
+  }
+
+  StreamSubscription<dynamic> streamSubscription = AppEventBus().stream.listen(
+      (pmDevice) => {bindPmToBoat(Boat("10000", 0), pmDevice.payLoad)},
+      onError: (err) => {print(err.toString())});
 }
 
 class Boat {

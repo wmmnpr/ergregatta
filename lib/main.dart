@@ -1,12 +1,12 @@
 import 'dart:async';
 
-import 'package:ergregatta/session_context.dart';
 import 'package:ergregatta/rowing_scene.dart';
 import 'package:ergregatta/screens/bluetooth_off_screen.dart';
 import 'package:ergregatta/screens/scan_screen.dart';
-import 'package:ergregatta/select_device_screen.dart';
+import 'package:ergregatta/session_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:logging/logging.dart';
 
 import 'configuration_screen.dart';
 
@@ -43,9 +43,9 @@ class _RowingSceneWidgetState extends State<RowingSceneWidget> {
   }
 
   Future<void> _handleSelectDevice(BuildContext context) async {
-    BluetoothDevice returnedDevice = await Navigator.push(
+    BluetoothDevice? returnedDevice = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) =>  ConfigurationScreen()),
+      MaterialPageRoute(builder: (context) => ConfigurationScreen()),
     );
     if (returnedDevice != null) {
       setState(() {
@@ -123,7 +123,10 @@ class BluetoothAdapterStateObserver extends NavigatorObserver {
   }
 }
 
+var logger = Logger("main");
+
 void main() {
+  logger.info("Starting in {}", "main");
   runApp(MaterialApp(
     navigatorObservers: [BluetoothAdapterStateObserver()],
     home: RowingSceneWidget(),

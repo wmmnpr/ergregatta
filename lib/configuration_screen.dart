@@ -1,3 +1,5 @@
+import 'package:ergregatta/app_event_bus.dart';
+import 'package:ergregatta/pm_ble_wrapper.dart';
 import 'package:ergregatta/select_device_screen.dart';
 import 'package:ergregatta/session_context.dart';
 import 'package:flutter/material.dart';
@@ -41,11 +43,12 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
 
     if (!context.mounted) return;
 
-    SessionContext().localDevice = device;
+    PmBleWrapper(device).enumerate().then((d) => {
+          AppEventBus().sendEvent(
+              AppEvent<PmBleWrapper>(AppEventType.LOCAL_PM_ATTACHED, d))
+        });
 
-    setState(() {
-
-    });
+    setState(() {});
 
     ScaffoldMessenger.of(context)
       ..removeCurrentSnackBar()
@@ -88,7 +91,9 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
         children: <Widget>[
           ListTile(
             title: const Text("Select Device"),
-            leading: SessionContext().localDevice != null ? const Icon(Icons.thumb_up_alt_outlined) : const Icon(Icons.thumb_down_alt_outlined),
+            leading: SessionContext().localDevice != null
+                ? const Icon(Icons.thumb_up_alt_outlined)
+                : const Icon(Icons.thumb_down_alt_outlined),
             trailing: IconButton(
               icon: const Icon(Icons.start),
               tooltip: 'Select Device',
@@ -97,7 +102,7 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
           ),
           ListTile(
             title: const Text("Connect (Step 2)"),
-            leading:  const Icon(Icons.thumb_down_alt_outlined),
+            leading: const Icon(Icons.thumb_down_alt_outlined),
             trailing: IconButton(
                 icon: const Icon(Icons.start),
                 tooltip: 'Connect',
@@ -105,7 +110,7 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
           ),
           ListTile(
             title: const Text("Setup Workout - hard coded"),
-            leading:  const Icon(Icons.thumb_down_alt_outlined),
+            leading: const Icon(Icons.thumb_down_alt_outlined),
             trailing: IconButton(
                 icon: const Icon(Icons.start),
                 tooltip: 'Setup workout',
@@ -113,7 +118,7 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
           ),
           ListTile(
             title: const Text("Subscribe StrokeData Characteristic"),
-            leading:  const Icon(Icons.thumb_down_alt_outlined),
+            leading: const Icon(Icons.thumb_down_alt_outlined),
             trailing: IconButton(
                 icon: const Icon(Icons.start),
                 tooltip: 'Subscribe Notification',
@@ -121,7 +126,7 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
           ),
           ListTile(
             title: const Text("Read selected 'Read Characteristic'"),
-            leading:  const Icon(Icons.thumb_down_alt_outlined),
+            leading: const Icon(Icons.thumb_down_alt_outlined),
             trailing: IconButton(
                 icon: const Icon(Icons.start),
                 tooltip: 'Read characteristic0x0022',
@@ -129,16 +134,15 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
           ),
           ListTile(
             title: const Text("Subscribe to selected"),
-            leading:  const Icon(Icons.thumb_down_alt_outlined),
+            leading: const Icon(Icons.thumb_down_alt_outlined),
             trailing: IconButton(
                 icon: const Icon(Icons.start),
                 tooltip: 'Increase volume by 10',
                 onPressed: () => _handleSubscribeSelected()),
           ),
           ListTile(
-            title: const Text(
-                "Send command "),
-            leading:  const Icon(Icons.thumb_down_alt_outlined),
+            title: const Text("Send command "),
+            leading: const Icon(Icons.thumb_down_alt_outlined),
             trailing: IconButton(
                 icon: const Icon(Icons.start),
                 tooltip: 'Send command',
@@ -146,7 +150,7 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
           ),
           ListTile(
             title: const Text("Send Command using API'"),
-            leading:  const Icon(Icons.thumb_down_alt_outlined),
+            leading: const Icon(Icons.thumb_down_alt_outlined),
             trailing: IconButton(
                 icon: const Icon(Icons.start),
                 tooltip: 'Send Command using API',
@@ -154,7 +158,7 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
           ),
           ListTile(
             title: const Text("Read Characteristic"),
-            leading:  const Icon(Icons.thumb_down_alt_outlined),
+            leading: const Icon(Icons.thumb_down_alt_outlined),
             trailing: DropdownButton<String>(
                 value: "",
                 icon: const Icon(Icons.list),
@@ -172,7 +176,7 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
           ),
           ListTile(
             title: const Text("Write Characteristic"),
-            leading:  const Icon(Icons.thumb_down_alt_outlined),
+            leading: const Icon(Icons.thumb_down_alt_outlined),
             trailing: DropdownButton<String>(
                 value: "",
                 icon: const Icon(Icons.list),
