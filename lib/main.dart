@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:ergregatta/regatta_manager.dart';
+import 'package:ergregatta/session_context.dart';
 import 'package:ergregatta/rowing_scene.dart';
 import 'package:ergregatta/screens/bluetooth_off_screen.dart';
 import 'package:ergregatta/screens/scan_screen.dart';
-import 'package:ergregatta/select_device.dart';
+import 'package:ergregatta/select_device_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
@@ -56,7 +56,7 @@ class _RowingSceneWidgetState extends State<RowingSceneWidget> {
 
   void _updateBoats() {
     pushCount++;
-    for (var b in RegattaManager.boats) {
+    for (var b in SessionContext().boats) {
       b.rowed = b.rowed + 10;
     }
     setState(() {

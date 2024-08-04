@@ -1,11 +1,11 @@
 import 'dart:ui';
 
-import 'package:ergregatta/regatta_manager.dart';
+import 'package:ergregatta/session_context.dart';
 import 'package:ergregatta/segment_display.dart';
 import 'package:flutter/material.dart';
 
 class RowingScene extends CustomPainter {
-  RegattaManager boatManager = RegattaManager();
+  SessionContext boatManager = SessionContext();
 
   Paint bgPaint = Paint().configure(color: Colors.lightBlue);
 
@@ -18,7 +18,7 @@ class RowingScene extends CustomPainter {
         Rect.fromPoints(const Offset(0, 0), Offset(size.width, size.height));
     canvas.drawRect(rectSize, bgPaint);
 
-    List<Boat> boats = RegattaManager.boats;
+    List<Boat> boats = SessionContext().boats;
 
     int laneCount = boats.length;
     double lh = size.height / laneCount;
@@ -45,9 +45,9 @@ class RowingScene extends CustomPainter {
           125, 50, b.rowed.toInt().toString().padLeft(4, "0"));
       sg3.draw();
 
-      Rect r = Rect.fromLTWH(b.rowed - 50, lh * i + lh / 2.0 - 25, 100, 40);
+      Rect r = Rect.fromLTWH(b.rowed - 50, lh * i + lh / 2.0 - 25, 100, 25);
 
-      canvas.drawRect(r, linePaint);
+      canvas.drawOval(r, linePaint);
     }
     Offset p1 = Offset(0, size.height); //top
     Offset p2 = Offset(size.width, size.height); //bottom
