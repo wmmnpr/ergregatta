@@ -43,10 +43,7 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
 
     if (!context.mounted) return;
 
-    PmBleWrapper(device).enumerate().then((d) => {
-          AppEventBus().sendEvent(
-              AppEvent<PmBleWrapper>(AppEventType.LOCAL_PM_ATTACHED, d))
-        });
+    await PmBleWrapper(device).enumerate();
 
     setState(() {});
 

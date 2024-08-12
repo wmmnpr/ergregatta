@@ -3,6 +3,8 @@ import 'package:ergregatta/pm_ble_characteristic.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:logging/logging.dart';
 
+import 'app_event_bus.dart';
+
 class PmBleWrapper {
   final log = Logger('PmBleWrapper');
   Map<int, DeviceCharacteristic> characteristics = {};
@@ -15,13 +17,8 @@ class PmBleWrapper {
   Future<PmBleWrapper> enumerate() async {
     ///////
     // listen for disconnection
-    var subscription = bluetoothDevice.connectionState
-        .listen((BluetoothConnectionState state) async {
+    bluetoothDevice.connectionState.listen((BluetoothConnectionState state) {
       if (state == BluetoothConnectionState.connected) {
-        // 1. typically, start a periodic timer that tries to
-        //    reconnect, or just call connect() again right now
-        // 2. you must always re-discover services after disconnection!
-
         Guid guid21 = Guid("ce060021-43e5-11e4-916c-0800200c9a66");
         Guid guid22 = Guid("ce060022-43e5-11e4-916c-0800200c9a66");
         Guid guid32 = Guid("ce060032-43e5-11e4-916c-0800200c9a66");
@@ -56,6 +53,8 @@ class PmBleWrapper {
             }
           }
           pmBLEDevice = PmBLEDevice(characteristics);
+          AppEventBus().sendEvent(
+              AppEvent<PmBleWrapper>(AppEventType.LOCAL_PM_ATTACHED, this));
         });
       }
     });

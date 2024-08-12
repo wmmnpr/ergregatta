@@ -26,14 +26,19 @@ class SessionContext {
   }
 
   static bindPmToBoat(Boat boat, PmBleWrapper deviceWrapper) {
-    deviceWrapper.pmBLEDevice?.subscribe<StrokeData>(StrokeData.uuid).listen((strokeData) {
-      boat.rowed = strokeData.distance;
+    deviceWrapper.pmBLEDevice!.subscribe<StrokeData>(StrokeData.uuid).listen(
+        (strokeData) {
+      boat.rowed = strokeData.distance * 100;
+      AppEventBus().sendEvent(AppEvent(AppEventType.PM_DATA_UPDATE, null));
     }, onError: (error) {}, onDone: () {});
     SessionContext().boats.add(Boat("10000", 0));
   }
 
   StreamSubscription<dynamic> streamSubscription = AppEventBus().stream.listen(
-      (pmDevice) => {bindPmToBoat(Boat("10000", 0), pmDevice.payLoad)},
+      (appEvent) => {
+            if (AppEventType.LOCAL_PM_ATTACHED == appEvent.type)
+              {bindPmToBoat(Boat("10000", 0), appEvent.payLoad)}
+          },
       onError: (err) => {print(err.toString())});
 }
 
