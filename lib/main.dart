@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:isolate';
 
 import 'package:ergregatta/rowing_scene.dart';
 import 'package:ergregatta/screens/bluetooth_off_screen.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:logging/logging.dart';
 
+import 'app_event_bus.dart';
 import 'configuration_screen.dart';
 
 class RowingSceneWidget extends StatefulWidget {
@@ -34,6 +36,27 @@ class _RowingSceneWidgetState extends State<RowingSceneWidget> {
         setState(() {});
       }
     });
+
+    _startIsolate();
+  }
+
+  void _startIsolate() async {
+    final receivePort = ReceivePort();
+    Isolate.spawn(_isolateFunction, receivePort.sendPort);
+    receivePort.listen((newData) {
+      print("recievePort called");
+      setState(() {});
+    });
+  }
+
+  static void _isolateFunction(SendPort sendPort) {
+    print("_isolateFunction started***************");
+    AppEventBus().stream.listen((appEvent) {
+      print("_isolateFunction called");
+      if (AppEventType.PM_DATA_UPDATE == appEvent.type) {
+        sendPort.send("null");
+      }
+    }, onError: (err) => {print(err.toString())});
   }
 
   @override
@@ -59,9 +82,9 @@ class _RowingSceneWidgetState extends State<RowingSceneWidget> {
     for (var b in SessionContext().boats) {
       b.rowed = b.rowed + 10;
     }
-    setState(() {
-      // Trigger a repaint by updating the state
-    });
+
+    AppEventBus().sendEvent(AppEvent(AppEventType.PM_DATA_UPDATE, ""));
+
   }
 
   @override

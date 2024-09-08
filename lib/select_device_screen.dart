@@ -5,6 +5,8 @@ import 'package:ergregatta/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
+import 'app_event_bus.dart';
+
 class SelectDeviceScreen extends StatefulWidget {
   const SelectDeviceScreen({super.key});
 

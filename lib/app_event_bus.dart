@@ -1,12 +1,10 @@
 import 'dart:async';
 
-import 'package:ergc2_pm_csafe/ergc2_pm_csafe.dart';
-
 enum AppEventType { LOCAL_PM_ATTACHED, PM_DATA_UPDATE }
 
-class AppEvent<E> {
+class AppEvent {
   AppEventType type;
-  E payLoad;
+  dynamic payLoad;
 
   AppEvent(this.type, this.payLoad);
 }

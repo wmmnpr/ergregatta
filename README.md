@@ -25,3 +25,5 @@ samples, guidance on mobile development, and a full API reference.
 connect to peripheral device as demo in local flutter_ble_peripheral example.
 The example as been modified so that the demo app will send data to any app subscribed to the characteristic.
 
+#TODO advertise and sweep 
+

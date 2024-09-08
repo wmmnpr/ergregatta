@@ -53,8 +53,8 @@ class PmBleWrapper {
             }
           }
           pmBLEDevice = PmBLEDevice(characteristics);
-          AppEventBus().sendEvent(
-              AppEvent<PmBleWrapper>(AppEventType.LOCAL_PM_ATTACHED, this));
+          AppEventBus()
+              .sendEvent(AppEvent(AppEventType.LOCAL_PM_ATTACHED, this));
         });
       }
     });
