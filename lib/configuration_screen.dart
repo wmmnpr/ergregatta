@@ -4,7 +4,7 @@ import 'package:ergregatta/select_device_screen.dart';
 import 'package:ergregatta/session_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-import 'package:logging/logging.dart';
+import 'package:logger/logger.dart';
 
 class ConfigurationScreen extends StatefulWidget {
   const ConfigurationScreen({super.key});
@@ -14,7 +14,7 @@ class ConfigurationScreen extends StatefulWidget {
 }
 
 class _ConfigurationScreenState extends State<ConfigurationScreen> {
-  final log = Logger('_ConfigurationScreenState');
+  final log = Logger();
 
   @override
   void initState() {

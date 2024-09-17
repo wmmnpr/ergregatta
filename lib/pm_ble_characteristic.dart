@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:ergc2_pm_csafe/ergc2_pm_csafe.dart';
+import 'package:flutter_ble_c2pm/flutter_ble_c2pm.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
 abstract class DeviceCharacteristic<T> extends PmBleCharacteristic<T> {

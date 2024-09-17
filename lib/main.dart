@@ -7,7 +7,7 @@ import 'package:ergregatta/screens/scan_screen.dart';
 import 'package:ergregatta/session_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-import 'package:logging/logging.dart';
+import 'package:logger/logger.dart';
 
 import 'app_event_bus.dart';
 import 'configuration_screen.dart';
@@ -84,7 +84,6 @@ class _RowingSceneWidgetState extends State<RowingSceneWidget> {
     }
 
     AppEventBus().sendEvent(AppEvent(AppEventType.PM_DATA_UPDATE, ""));
-
   }
 
   @override
@@ -146,10 +145,10 @@ class BluetoothAdapterStateObserver extends NavigatorObserver {
   }
 }
 
-var logger = Logger("main");
+var logger = Logger(level: null, printer: PrettyPrinter(), output: null);
 
 void main() {
-  logger.info("Starting in {}", "main");
+  logger.i("Starting in main");
   runApp(MaterialApp(
     navigatorObservers: [BluetoothAdapterStateObserver()],
     home: RowingSceneWidget(),

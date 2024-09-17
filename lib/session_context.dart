@@ -1,13 +1,13 @@
 import 'dart:async';
 
-import 'package:ergc2_pm_csafe/ergc2_pm_csafe.dart';
 import 'package:ergregatta/pm_ble_wrapper.dart';
-import 'package:logging/logging.dart';
+import 'package:flutter_ble_c2pm/flutter_ble_c2pm.dart';
+import 'package:logger/logger.dart';
 
 import 'app_event_bus.dart';
 
 class SessionContext {
-  static final log = Logger('SessionContext');
+  static final log = Logger();
   static final SessionContext _instance = SessionContext._internal();
 
   SessionContext._internal();
@@ -29,20 +29,25 @@ class SessionContext {
     deviceWrapper.pmBLEDevice!.subscribe<StrokeData>(StrokeData.uuid).listen(
         (strokeData) {
       boat.rowed = strokeData.distance * 100;
-      print("bindPmToBoat - context strokeData ${boat.rowed}");
-      AppEventBus().sendEvent(AppEvent(AppEventType.PM_DATA_UPDATE, "data received"));
-    }, onError: (error) {log.severe(error);}, onDone: () {log.info("message");});
+      log.i("bindPmToBoat - context strokeData ${boat.rowed}");
+      AppEventBus()
+          .sendEvent(AppEvent(AppEventType.PM_DATA_UPDATE, "data received"));
+    }, onError: (error) {
+      log.e(error);
+    }, onDone: () {
+      log.i("message");
+    });
     SessionContext().boats.add(Boat("10000", 0));
   }
 
   StreamSubscription<dynamic> streamSubscription = AppEventBus().stream.listen(
       (appEvent) => {
             if (AppEventType.LOCAL_PM_ATTACHED == appEvent.type)
-              {bindPmToBoat(Boat("10000", 0), appEvent.payLoad)} else {
-              print("updated from bus")
-            }
+              {bindPmToBoat(Boat("10000", 0), appEvent.payLoad)}
+            else
+              {log.i("updated from bus")}
           },
-      onError: (err) => {print(err.toString())});
+      onError: (err) => {log.e(err.toString())});
 }
 
 class Boat {

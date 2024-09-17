@@ -1,6 +1,6 @@
-import 'package:ergc2_pm_csafe/ergc2_pm_csafe.dart';
 import 'package:ergregatta/pm_ble_characteristic.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:flutter_ble_c2pm/flutter_ble_c2pm.dart';
 import 'package:logging/logging.dart';
 
 import 'app_event_bus.dart';
