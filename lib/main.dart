@@ -2,8 +2,6 @@ import 'dart:async';
 import 'dart:isolate';
 
 import 'package:ergregatta/rowing_scene.dart';
-import 'package:ergregatta/screens/bluetooth_off_screen.dart';
-import 'package:ergregatta/screens/scan_screen.dart';
 import 'package:ergregatta/session_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
@@ -88,10 +86,6 @@ class _RowingSceneWidgetState extends State<RowingSceneWidget> {
 
   @override
   Widget build(BuildContext context) {
-    Widget screen = _adapterState == BluetoothAdapterState.on
-        ? const ScanScreen()
-        : BluetoothOffScreen(adapterState: _adapterState);
-
     return Scaffold(
       body: Center(
         child: CustomPaint(
