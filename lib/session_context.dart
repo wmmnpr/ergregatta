@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:ergregatta/pm_ble_wrapper.dart';
 import 'package:flutter_ble_c2pm/flutter_ble_c2pm.dart';
 import 'package:logger/logger.dart';
 
