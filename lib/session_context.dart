@@ -30,7 +30,7 @@ class SessionContext {
       boat.rowed = strokeData.distance * 100;
       log.i("bindPmToBoat - context strokeData ${boat.rowed}");
       AppEventBus()
-          .sendEvent(AppEvent(AppEventType.PM_DATA_UPDATE, "data received"));
+          .sendEvent(AppEvent(AppEventType.PM_DATA_UPDATE, strokeData));
     }, onError: (error) {
       log.e(error);
     }, onDone: () {
@@ -40,11 +40,16 @@ class SessionContext {
   }
 
   StreamSubscription<dynamic> streamSubscription = AppEventBus().stream.listen(
-      (appEvent) => {
+      (appEvent)  {
             if (AppEventType.LOCAL_PM_ATTACHED == appEvent.type)
-              {bindPmToBoat(Boat("10000", 0), appEvent.payLoad)}
+              {
+                bindPmToBoat(Boat("10000", 0), appEvent.payLoad);
+              }
             else
-              {log.i("updated from bus")}
+              {
+                StrokeData strokeData = appEvent.payLoad as StrokeData;
+                log.i("updated from bus ${strokeData.distance}");
+              }
           },
       onError: (err) => {log.e(err.toString())});
 }
