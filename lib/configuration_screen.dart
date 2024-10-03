@@ -1,4 +1,3 @@
-import 'package:ergregatta/app_event_bus.dart';
 import 'package:ergregatta/session_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ble_c2pm/flutter_ble_c2pm.dart';
@@ -38,9 +37,7 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
       context,
       MaterialPageRoute(builder: (context) => const SelectDeviceScreen()),
     );
-
-    AppEventBus()
-        .sendEvent(AppEvent(AppEventType.LOCAL_PM_ATTACHED, pmBleWrapper));
+    SessionContext().addDevice(pmBleWrapper);
 
     if (!context.mounted) return;
 

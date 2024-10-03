@@ -19,6 +19,7 @@ class RowingSceneWidget extends StatefulWidget {
 
 class _RowingSceneWidgetState extends State<RowingSceneWidget> {
   int pushCount = 0;
+  final receivePort = ReceivePort();
   late BluetoothDevice activeDevice;
   BluetoothAdapterState _adapterState = BluetoothAdapterState.unknown;
 
@@ -39,22 +40,11 @@ class _RowingSceneWidgetState extends State<RowingSceneWidget> {
   }
 
   void _startIsolate() async {
-    final receivePort = ReceivePort();
-    Isolate.spawn(_isolateFunction, receivePort.sendPort);
+    SessionContext().sendPort = receivePort.sendPort;
     receivePort.listen((newData) {
       print("recievePort called");
       setState(() {});
     });
-  }
-
-  static void _isolateFunction(SendPort sendPort) {
-    print("_isolateFunction started***************");
-    AppEventBus().stream.listen((appEvent) {
-      print("_isolateFunction called");
-      if (AppEventType.PM_DATA_UPDATE == appEvent.type) {
-        sendPort.send("null");
-      }
-    }, onError: (err) => {print(err.toString())});
   }
 
   @override

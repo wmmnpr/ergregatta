@@ -10,9 +10,9 @@ class AppEvent {
 }
 
 class AppEventBus {
-  AppEventBus._privateConstructor();
+  AppEventBus._internal();
 
-  static final AppEventBus _instance = AppEventBus._privateConstructor();
+  static final AppEventBus _instance = AppEventBus._internal();
 
   factory AppEventBus() {
     return _instance;

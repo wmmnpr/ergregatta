@@ -1,57 +1,51 @@
-import 'dart:async';
+import 'dart:isolate';
 
 import 'package:flutter_ble_c2pm/flutter_ble_c2pm.dart';
 import 'package:logger/logger.dart';
 
-import 'app_event_bus.dart';
-
 class SessionContext {
-  static final log = Logger();
   static final SessionContext _instance = SessionContext._internal();
 
   SessionContext._internal();
+
+  static final log = Logger();
+  PmBleWrapper? localDevice;
+  List<Boat> boats = [];
+  SendPort? sendPort;
 
   factory SessionContext() {
     return _instance;
   }
 
-  PmBleWrapper? localDevice;
-
-  final List<Boat> boats = initBoats();
-
-  static List<Boat> initBoats() {
-    List<Boat> list = [];
-    return list;
+  addDevice(PmBleWrapper deviceWrapper) {
+    _bindPmDeviceToBoatAvatar(Boat("1000", 0), deviceWrapper);
   }
 
-  static bindPmToBoat(Boat boat, PmBleWrapper deviceWrapper) {
+  _bindPmDeviceToBoatAvatar(Boat boat, PmBleWrapper deviceWrapper) {
+    boats.add(boat);
     deviceWrapper.pmBLEDevice!.subscribe<StrokeData>(StrokeData.uuid).listen(
         (strokeData) {
-      boat.rowed = strokeData.distance * 100;
-      log.i("bindPmToBoat - context strokeData ${boat.rowed}");
-      AppEventBus()
-          .sendEvent(AppEvent(AppEventType.PM_DATA_UPDATE, strokeData));
+      boat.rowed = strokeData.distance * 10;
+      log.i("strokeData rowed ${boat.rowed}");
+      sendPort?.send(strokeData);
     }, onError: (error) {
       log.e(error);
     }, onDone: () {
       log.i("message");
     });
-    SessionContext().boats.add(Boat("10000", 0));
-  }
 
-  StreamSubscription<dynamic> streamSubscription = AppEventBus().stream.listen(
-      (appEvent)  {
-            if (AppEventType.LOCAL_PM_ATTACHED == appEvent.type)
-              {
-                bindPmToBoat(Boat("10000", 0), appEvent.payLoad);
-              }
-            else
-              {
-                StrokeData strokeData = appEvent.payLoad as StrokeData;
-                log.i("updated from bus ${strokeData.distance}");
-              }
-          },
-      onError: (err) => {log.e(err.toString())});
+    deviceWrapper.pmBLEDevice!
+        .subscribe<AdditionalStatus1>(AdditionalStatus1.uuid)
+        .listen((additionalStatus1) {
+      //boat.rowed = additionalStatus1.restTime;
+      log.i("additionalStatus1 rowed ${boat.rowed}");
+      sendPort?.send(additionalStatus1);
+    }, onError: (error) {
+      log.e(error);
+    }, onDone: () {
+      log.i("message");
+    });
+  }
 }
 
 class Boat {
